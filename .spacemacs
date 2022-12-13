@@ -804,6 +804,11 @@ This function is called at the very end of Spacemacs initialization."
    '("^\\.idea$" "^\\.vscode$" "^\\.ensime_cache$" "^\\.eunit$" "^\\.git$" "^\\.hg$" "^\\.fslckout$" "^_FOSSIL_$" "^\\.bzr$" "^_darcs$" "^\\.pijul$" "^\\.tox$" "^\\.svn$" "^\\.stack-work$" "^\\.ccls-cache$" "^\\.cache$" "^\\.clangd$" "^\\.clj-kondo" "^\\.lsp" "^\\.cpcache"))
  '(projectile-globally-ignored-file-suffixes '("~undo-tree~"))
  '(projectile-indexing-method 'hybrid)
+ '(spacemacs-theme-custom-colors
+   '((bg2 . "#353535")
+     (bg1 . "#181818")
+     (highlight . "#0e587c")
+     (lnum . "#67a08f")))
  '(warning-minimum-level :error)
  '(warning-suppress-types '((comp))))
 (custom-set-faces
