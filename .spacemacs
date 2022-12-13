@@ -731,10 +731,20 @@ before packages are loaded."
   (defun customkeys ()
     (evil-define-key '(normal insert visual motion emacs) 'global [mouse-4] #'previous-buffer)
     (evil-define-key '(normal insert visual motion emacs) 'global [mouse-5] #'next-buffer)
-    ; (evil-define-key '(normal insert visual motion emacs) 'global [drag-mouse-1] #'mouse-set-region)
     (evil-define-key '(normal insert visual emacs) dired-mode-map [mouse-1] #'dired-find-file))
 
   (require 'nerd-fonts)
+
+  (use-package all-the-icons
+    :if (display-graphic-p)
+    :config
+    ;; Make sure the icon fonts are good to go
+    (set-fontset-font t 'unicode (font-spec :family "all-the-icons") nil 'prepend)
+    (set-fontset-font t 'unicode (font-spec :family "file-icons") nil 'prepend)
+    (set-fontset-font t 'unicode (font-spec :family "Material Icons") nil 'prepend)
+    (set-fontset-font t 'unicode (font-spec :family "github-octicons") nil 'prepend)
+    (set-fontset-font t 'unicode (font-spec :family "FontAwesome") nil 'prepend)
+    (set-fontset-font t 'unicode (font-spec :family "Weather Icons") nil 'prepend))
 
   (use-package all-the-icons-nerd-fonts
     :load-path "usr/all-the-icons-nerd-fonts"
@@ -779,7 +789,6 @@ This function is called at the very end of Spacemacs initialization."
  ;; If there is more than one, they won't work right.
  '(all-the-icons--cache-limit 4096)
  '(all-the-icons-alltheicon-scale-factor 1.4)
- '(all-the-icons-nerd-fonts-family "FiraCode Nerd Font")
  '(all-the-icons-scale-factor 1.4)
  '(bidi-paragraph-direction 'left-to-right)
  '(cider-auto-jump-to-error nil)
@@ -804,6 +813,7 @@ This function is called at the very end of Spacemacs initialization."
    '("^\\.idea$" "^\\.vscode$" "^\\.ensime_cache$" "^\\.eunit$" "^\\.git$" "^\\.hg$" "^\\.fslckout$" "^_FOSSIL_$" "^\\.bzr$" "^_darcs$" "^\\.pijul$" "^\\.tox$" "^\\.svn$" "^\\.stack-work$" "^\\.ccls-cache$" "^\\.cache$" "^\\.clangd$" "^\\.clj-kondo" "^\\.lsp" "^\\.cpcache"))
  '(projectile-globally-ignored-file-suffixes '("~undo-tree~"))
  '(projectile-indexing-method 'hybrid)
+ '(spacemacs-theme-comment-bg nil)
  '(spacemacs-theme-custom-colors
    '((bg2 . "#353535")
      (bg1 . "#181818")
