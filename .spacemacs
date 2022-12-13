@@ -32,13 +32,12 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(go
+   '(python
      ruby
-     windows-scripts
-     autohotkey
      csv
      html
      rust
+     systemd
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
@@ -53,29 +52,27 @@ This function should only modify configuration layer settings."
      emacs-lisp
      git
      helm
-     ;lsp
+
      (lsp :variables
           ;; Formatting and indentation - use Cider instead
-           lsp-enable-on-type-formatting nil
+          lsp-enable-on-type-formatting nil
           ;; Set to nil to use CIDER features instead of LSP UI
-           lsp-enable-indentation nil
-          ;; lsp-enable-snippet t  ;; to test again
+          lsp-enable-indentation nil
+          lsp-enable-snippet nil  ;; to test again
           ;; symbol highlighting - `lsp-toggle-symbol-highlight` toggles highlighting
           ;; subtle highlighting for doom-gruvbox-light theme defined in dotspacemacs/user-config
-          lsp-enable-symbol-highlighting nil
+           ;;lsp-enable-symbol-highlighting t
 
           ;; Show lint error indicator in the mode line
           lsp-modeline-diagnostics-enable t
-
-          lsp-use-lsp-ui t
-          lsp-headerline-breadcrumb-enable t
+          ;; lsp-modeline-diagnostics-scope :workspace
 
           ;; popup documentation boxes
-          lsp-ui-doc-enable nil          ;; disable all doc popups
+           lsp-ui-doc-enable t          ;; disable all doc popups
           ;; lsp-ui-doc-show-with-cursor t   ;; doc popup for cursor
           ;; lsp-ui-doc-show-with-mouse t   ;; doc popup for mouse
           ;; lsp-ui-doc-delay 2             ;; delay in seconds for popup to display
-          ; lsp-ui-doc-include-signature t    ;; include function signature
+          lsp-ui-doc-include-signature t    ;; include function signature
           ;; lsp-ui-doc-position 'at-point  ;; positioning of doc popup: top bottom at-point
           ;; lsp-ui-doc-alignment 'window      ;; relative location of doc popup: frame window
 
@@ -93,13 +90,19 @@ This function should only modify configuration layer settings."
           treemacs-space-between-root-nodes nil
 
           ;; Optimization for large files
-          ;; lsp-file-watch-threshold 10000
-          lsp-log-io nil)
-     ;(haskell :variables haskell-completion-backend 'lsp)
+          lsp-file-watch-threshold 10000
+          lsp-log-io nil
+
+
+          lsp-use-lsp-ui t
+          lsp-headerline-breadcrumb-enable t)
+
      markdown
      org
 
      (shell :variables
+            shell-default-shell 'vterm
+            shell-default-term-shell "/bin/zsh"
             shell-default-height 30
             shell-default-position 'bottom)
 
@@ -112,61 +115,48 @@ This function should only modify configuration layer settings."
      version-control
      treemacs
      theming
-     ;themes-megapack
      c-c++
-     racket
+     ;racket
      common-lisp
-     (clojure :variables
-              clojure-enable-linters 'clj-kondo
-              ;clojure-enable-fancify-symbols t
-              )
+     clojure
      ;go
      ;python
      pdf
      javascript
-     ;typescript
-     java
+     typescript
+     (java :variables java-backend 'lsp)
      (unicode-fonts :variables unicode-fonts-enable-ligatures t)
-     ;(dash :variables
-     ;      dash-autoload-common-docsets t
-     ;      dash-docs-docset-newpath "d:/Lib/docsets")
+     dash
      dap
-     spacemacs-base
      spacemacs-org
-     ;spacemacs-purpose
+     spacemacs-purpose
      spacemacs-project
      spacemacs-navigation
-     spacemacs-modeline
-     ;spacemacs-layouts
-     ;dtrt-indent
+     ;spacemacs-modeline
+     spacemacs-layouts
+     dtrt-indent
      spacemacs-completion
      spacemacs-defaults
-     spacemacs-editing
+     ;spacemacs-editing
      ;spacemacs-editing-visual
-     spacemacs-evil
-     ;spacemacs-visual
-     gtags
      colors
      react
      node
      shell-scripts
      json
-     ;ibuffer
+     ibuffer
      imenu-list
      ;tabs
      typography
      ;vim-empty-lines
-     ;xkcd
-     ;ranger
-     ;web-beautify
-     ;copy-as-format
+     xkcd
+     ranger
+     web-beautify
+     copy-as-format
      helpful
      latex
      extempore
-     floobits
-     docker
-     cmake)
-     ;parinfer)
+     )
 
    ;; List of additional packages that will be installed without being wrapped
    ;; in a layer (generally the packages are installed only and should still be
@@ -176,14 +166,14 @@ This function should only modify configuration layer settings."
    ;; `dotspacemacs/user-config'. To use a local version of a package, use the
    ;; `:location' property: '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '(geiser geiser-racket)
+   dotspacemacs-additional-packages '(flycheck-posframe vterm all-the-icons minibuffer-header company-box popwin geiser geiser-racket) ;'(ein elpy eglot toml-mode w3m use-package company irony company-irony company-box ccls flymake-racket cl-lib popwin geiser geiser-racket shackle exec-path-from-shell solarized-theme bui emms esup flycheck-posframe all-the-icons minibuffer-header vterm)
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
 
    ;; A list of packages that will not be installed and loaded.
 
-   dotspacemacs-excluded-packages '(systemd)
+   dotspacemacs-excluded-packages '()
 
    ;; Defines the behaviour of Spacemacs when installing packages.
    ;; Possible values are `used-only', `used-but-keep-unused' and `all'.
@@ -242,7 +232,7 @@ It should only modify the values of Spacemacs settings."
    ;; This is an advanced option and should not be changed unless you suspect
    ;; performance issues due to garbage collection operations.
    ;; (default '(100000000 0.1))
-   dotspacemacs-gc-cons '(10000000 0.1) ;(list (* 1024 1024 256) 0.1)
+   dotspacemacs-gc-cons '(100000000 0.1)
 
    ;; Set `read-process-output-max' when startup finishes.
    ;; This defines how much data is read from a foreign process.
@@ -378,10 +368,10 @@ It should only modify the values of Spacemacs settings."
    ;; a non-negative integer (pixel size), or a floating-point (point size).
    ;; Point size is recommended, because it's device independent. (default 10.0)
    dotspacemacs-default-font '("FiraCode Nerd Font"
-                               :size 10.0
+                               :size 12.0
                                :weight normal
                                :width normal
-                               :powerline-scale 1.2)
+                               :powerline-scale 1.1)
 
    ;; The leader key (default "SPC")
    dotspacemacs-leader-key "SPC"
@@ -492,7 +482,7 @@ It should only modify the values of Spacemacs settings."
    ;; A value from the range (0..100), in increasing opacity, which describes
    ;; the transparency level of a frame when it's active or selected.
    ;; Transparency can be toggled through `toggle-transparency'. (default 90)
-   dotspacemacs-active-transparency 100
+   dotspacemacs-active-transparency 90
 
    ;; A value from the range (0..100), in increasing opacity, which describes
    ;; the transparency level of a frame when it's inactive or deselected.
@@ -513,7 +503,7 @@ It should only modify the values of Spacemacs settings."
    ;; If non-nil smooth scrolling (native-scrolling) is enabled. Smooth
    ;; scrolling overrides the default behavior of Emacs which recenters point
    ;; when it reaches the top or bottom of the screen. (default t)
-   dotspacemacs-smooth-scrolling nil
+   dotspacemacs-smooth-scrolling t
 
    ;; Show the scroll bar while scrolling. The auto hide time can be configured
    ;; by setting this variable to a number. (default t)
@@ -584,7 +574,7 @@ It should only modify the values of Spacemacs settings."
    ;; List of search tool executable names. Spacemacs uses the first installed
    ;; tool of the list. Supported tools are `rg', `ag', `pt', `ack' and `grep'.
    ;; (default '("rg" "ag" "pt" "ack" "grep"))
-   dotspacemacs-search-tools '("ag" "rg" "pt" "ack" "grep")
+   dotspacemacs-search-tools '("rg" "ag" "pt" "ack" "grep")
 
    ;; Format specification for setting the frame title.
    ;; %a - the `abbreviated-file-name', or `buffer-name'
@@ -606,7 +596,7 @@ It should only modify the values of Spacemacs settings."
    ;; performance issues, instead of calculating the frame title by
    ;; `spacemacs/title-prepare' all the time.
    ;; (default "%I@%S")
-   dotspacemacs-frame-title-format "%b @ Emacs"
+   dotspacemacs-frame-title-format "%b @ Emacs";nil ;"%I@%S"
 
    ;; Format specification for setting the icon title format
    ;; (default nil - same as frame-title-format)
@@ -653,7 +643,7 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-home-shorten-agenda-source nil
 
    ;; If non-nil then byte-compile some of Spacemacs files.
-   dotspacemacs-byte-compile nil))
+   dotspacemacs-byte-compile t))
 
 (defun dotspacemacs/user-env ()
   "Environment variables setup.
@@ -661,8 +651,8 @@ This function defines the environment variables for your Emacs session. By
 default it calls `spacemacs/load-spacemacs-env' which loads the environment
 variables declared in `~/.spacemacs.env' or `~/.spacemacs.d/.spacemacs.env'.
 See the header of this file for more information."
-  (spacemacs/load-spacemacs-env))
-
+  (spacemacs/load-spacemacs-env)
+  )
 
 (defun dotspacemacs/user-init ()
   "Initialization for user code:
@@ -670,22 +660,57 @@ This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
+
+  (setq warning-minimum-level :emergency)
+
   (defconst dd/using-native-comp (and (fboundp 'native-comp-available-p)
                                       (native-comp-available-p)))
+  (setq native-comp-async-query-on-exit t)
+  (setq native-comp-async-jobs-number 2)
+  (setq native-comp-async-report-warnings-errors nil)
+
+  ;; (let ((rip (shell-command-to-string ". ~/.bashrc; echo $RIP")))
+  ;;   (setenv "RIP" rip))
+
+  ;; (setq lsp-haskell-process-path-hie "hie-wrapper")
+  ;; (add-hook 'cc-mode (lambda () (smartparens-mode -1)))
+  ;; (add-hook 'cc-mode (lambda () (electric-pair-mode 1)))
+                                        ;   (spacemacs/toggle-smartparens-globally-off)
+                                        ;   (spacemacs/toggle-smartparens-off)
+
+  ;; (defvar slime-repl-font-lock-keywords lisp-el-font-lock-keywords-2)
+  ;; (defun slime-repl-font-lock-setup ()
+  ;;   (setq font-lock-defaults
+  ;;         '(slime-repl-font-lock-keywords
+  ;;           ;; From lisp-mode.el
+  ;;           nil nil (("+-*/.<>=!?$%_&~^:@" . "w")) nil
+  ;;           (font-lock-syntactic-face-function
+  ;;            . lisp-font-lock-syntactic-face-function))))
+
+  ;; (add-hook 'slime-repl-mode-hook 'slime-repl-font-lock-setup)
+
+  ;; (defadvice slime-repl-insert-prompt (after font-lock-face activate)
+  ;;   (let ((inhibit-read-only t))
+  ;;     (add-text-properties
+  ;;      slime-repl-prompt-start-mark (point)
+  ;;      '(font-lock-face
+  ;;        slime-repl-prompt-face
+  ;;        rear-nonsticky
+  ;;        (slime-repl-prompt read-only font-lock-face intangible)))))
 
   (defvar string-edit-mode nil)
 
   (setq-default lsp-use-plists t)
-  )
 
+  )
 
 
 (defun dotspacemacs/user-load ()
   "Library to load while dumping.
 This function is called only while dumping Spacemacs configuration. You can
 `require' or `load' the libraries of your choice that will be included in the
-dump.")
-
+dump."
+  )
 
 
 (defun dotspacemacs/user-config ()
@@ -694,27 +719,48 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
+
   (require 'use-package)
 
   (let ((default-directory "~/.emacs.d/usr"))
     (normal-top-level-add-subdirs-to-load-path))
 
-  ;; (use-package company
-  ;;  :config
-  ;;  (setq lsp-completion-provider :capf))
+  (add-hook 'geiser-repl-mode-hook
+            (lambda () (local-set-key (kbd "C-j") 'geiser-repl--newline-and-indent)))
+  ;;(add-hook 'geiser-repl-mode-hook
+  ;;          (lambda () (evil-mode -1)))
+  ;; (evil-set-initial-state 'geiser-repl-mode 'emacs)
 
-  ;; (add-hook 'company-completion-started-hook
-  ;;             #'(lambda (&rest _)
-  ;;                 (setq-local lsp-inhibit-lsp-hooks t)
-  ;;                 (lsp--capf-clear-cache))
-  ;;             nil
-  ;;             t)
+  ;; (use-package rustic)
+  ;; (spacemacs/toggle-smartparens-globally-off)
+  ;; (electric-pair-mode t)
+  ;; (spacemacs/toggle-smartparens-off)
+  ;; (remove-hook 'prog-mode-hook #'smartparens-mode)
 
-  ;(add-hook 'clojure-mode-hook #'lsp-deferred)
+  ;; (setq browse-url-browser-function 'w3m-browse-url)
+
+  (add-hook 'clojure-mode-hook #'lsp-deferred)
+
+  ;; (use-package slime-company
+  ;;   :after (slime company)
+  ;;   :config (setq slime-company-completion 'simple
+  ;;                 slime-company-after-completion 'nil))
+
+  (use-package company
+    :hook (scala-mode . company-mode)
+    :config
+    (setq lsp-completion-provider :capf))
 
   (add-hook 'prog-mode-hook 'undo-tree-mode)
 
-  (set-window-scroll-bars (minibuffer-window) 0 nil)
+  (require 'helm-files)
+  (require 'helm-command)
+
+  (remove-hook 'cider-repl-mode-hook 'vim-empty-lines-mode)
+
+  (blink-cursor-mode 1)
+
+  (set-window-scroll-bars (minibuffer-window) 0 'none)
 
   (defun update-scroll-bars ()
     (interactive)
@@ -726,25 +772,53 @@ before packages are loaded."
   (add-hook 'window-configuration-change-hook #'update-scroll-bars)
   (add-hook 'buffer-list-update-hook #'update-scroll-bars)
 
+  (use-package flycheck-posframe
+    :ensure t
+    :after flycheck
+    :config (add-hook 'flycheck-mode-hook #'flycheck-posframe-mode))
+
+  (add-hook 'company-completion-started-hook
+            #'(lambda (&rest _)
+              (setq-local lsp-inhibit-lsp-hooks t)
+              (lsp--capf-clear-cache))
+            nil
+            t)
+
+  ;; No quote pair in minib eval
+
+  ;; (sp-local-pair 'minibuffer-inactive-mode "'" nil :actions nil :unless '(my-in-eval-expression-p))
+  ;; (defun my-in-eval-expression-p (id action context) (equalp last-command 'eval-expression))
+
   (evil-set-initial-state 'cider-repl-mode 'insert)
 
   (defun customkeys ()
-    (evil-define-key '(normal insert visual motion emacs) 'global [mouse-4] #'previous-buffer)
-    (evil-define-key '(normal insert visual motion emacs) 'global [mouse-5] #'next-buffer)
-    ; (evil-define-key '(normal insert visual motion emacs) 'global [drag-mouse-1] #'mouse-set-region)
+    (evil-define-key '(normal insert visual motion emacs) 'global (kbd "<C-left>") #'previous-buffer)
+    (evil-define-key '(normal insert visual motion emacs) 'global (kbd "<C-right>") #'next-buffer)
     (evil-define-key '(normal insert visual emacs) dired-mode-map [mouse-1] #'dired-find-file))
 
   (require 'nerd-fonts)
+
+  (use-package all-the-icons
+    :config
+    ;; Make sure the icon fonts are good to go
+    (set-fontset-font t 'unicode (font-spec :family "all-the-icons") nil 'append)
+    (set-fontset-font t 'unicode (font-spec :family "file-icons") nil 'append)
+    (set-fontset-font t 'unicode (font-spec :family "Material Icons") nil 'append)
+    (set-fontset-font t 'unicode (font-spec :family "github-octicons") nil 'append)
+    (set-fontset-font t 'unicode (font-spec :family "FontAwesome") nil 'append)
+    (set-fontset-font t 'unicode (font-spec :family "Weather Icons") nil 'append))
 
   (use-package all-the-icons-nerd-fonts
     :load-path "usr/all-the-icons-nerd-fonts"
     :after all-the-icons
     :demand t
-    );:config (all-the-icons-nerd-fonts-prefer))
+    :config) ;(all-the-icons-nerd-fonts-prefer))
 
   (use-package spaceline-all-the-icons
     :after spaceline
     :config (spaceline-all-the-icons-theme))
+
+  (spaceline-all-the-icons--setup-anzu)            ;; Enable anzu searching
 
   (spaceline-toggle-all-the-icons-eyebrowse-workspace-off)
   (spaceline-toggle-all-the-icons-time-off)
@@ -754,17 +828,24 @@ before packages are loaded."
   (spaceline-toggle-projectile-root-off)
   (spaceline-toggle-all-the-icons-projectile-off)
   (setq spaceline-all-the-icons-slim-render nil)
+  ;;(spaceline-compile)
 
-  (setq-default find-program "c:/lib/msys64/usr/bin/find.exe")
+  ;; (defvar linit)
 
+  ;; (defun spreload ()
+  ;;   (if (boundp 'linit)
+  ;;       (setq linit nil)
+  ;;       (setq linit 1))
+  ;;   (when linit
+  ;;       (cl-do (dotspacemacs/sync-configuration-layers)
+  ;;           (remove-hook 'server-after-make-frame-hook #'spreload)
+  ;;         )))
+
+  (add-hook 'Info-selection-hook 'info-colors-fontify-node)
   (setq-default bidi-inhibit-bpa t)
   (setq-default inhibit-compacting-font-caches t)
   (customkeys)
-
-  (add-hook 'Info-selection-hook 'info-colors-fontify-node)
   )
-
-
 
 
 (defun dotspacemacs/emacs-custom-settings ()
@@ -777,39 +858,134 @@ This function is called at the very end of Spacemacs initialization."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(all-the-icons--cache-limit 4096)
- '(all-the-icons-alltheicon-scale-factor 1.4)
  '(all-the-icons-nerd-fonts-family "FiraCode Nerd Font")
- '(all-the-icons-scale-factor 1.4)
  '(bidi-paragraph-direction 'left-to-right)
+ '(blink-cursor-mode t)
+ '(centaur-tabs-auto-scroll-flag nil)
+ '(centaur-tabs-gray-out-icons 'buffer)
+ '(centaur-tabs-set-bar 'left)
+ '(centaur-tabs-set-modified-marker nil)
  '(cider-auto-jump-to-error nil)
  '(cider-auto-select-error-buffer nil)
- '(cider-clojure-cli-command "pwsh")
+ '(cider-eldoc-display-context-dependent-info t)
+ '(cider-eldoc-display-for-symbol-at-point t)
  '(cider-jack-in-default 'clojure-cli)
- '(cider-repl-use-content-types t)
- '(cider-show-error-buffer 'except-in-repl)
+ '(cider-repl-display-help-banner t)
+ '(cider-repl-pop-to-buffer-on-connect t t)
+ '(cider-show-error-buffer nil)
+ '(column-number-mode t)
+ '(comint-input-ignoredups t)
+ '(company-tooltip-align-annotations t)
  '(context-menu-mode t)
- '(epg-gpg-home-directory "c:/program files (x86)/gnupg/bin/gpg.exe")
+ '(create-lockfiles nil)
+ '(custom-safe-themes
+   '("fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "fee7287586b17efbfda432f05539b58e86e059e78006ce9237b8732fde991b4c" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" default))
+ '(dap-internal-terminal 'dap-internal-terminal-vterm)
+ '(frame-background-mode 'dark)
+ '(global-display-line-numbers-mode t)
  '(global-prettify-symbols-mode t)
+ '(global-term-cursor-mode nil)
+ '(global-undo-tree-mode nil)
+ '(helm-M-x-show-short-doc nil)
+ '(helm-apropos-show-short-doc t)
+ '(helm-frame-alpha 98)
+ '(helm-popup-tip-mode t)
+ '(image-use-external-converter t)
+ '(initial-buffer-choice '(closure (t) nil (get-buffer-create "*spacemacs*")))
  '(ls-lisp-use-insert-directory-program t)
- '(magit-git-executable "C:/Program Files/Git/bin/git.exe")
+ '(lsp-completion-provider :capf)
+ '(lsp-eldoc-render-all t)
+ '(lsp-enable-folding nil)
+ '(lsp-enable-indentation nil)
+ '(lsp-enable-on-type-formatting nil)
+ '(lsp-enable-symbol-highlighting nil)
+ '(lsp-headerline-breadcrumb-enable-diagnostics nil)
+ '(lsp-java-workspace-dir "/home/psi/code/inlmning")
+ '(lsp-lens-enable t)
+ '(lsp-progress-spinner-type 'horizontal-breathing)
+ '(lsp-ui-doc-enable t)
  '(menu-bar-mode t)
  '(mouse-1-click-follows-link 100)
- '(package-gnupghome-dir "~/.emacs.d/elpa/gnupg")
+ '(mouse-wheel-progressive-speed nil)
+ '(org-format-latex-options
+   '(:foreground default :background default :scale 1.6 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers
+                 ("begin" "$1" "$" "$$" "\\(" "\\[")))
  '(package-selected-packages
-   '(geiser-racket geiser company-go counsel-gtags counsel swiper ivy flycheck-golangci-lint go-eldoc go-fill-struct go-gen-test go-guru go-impl go-rename go-tag go-mode godoctor lsp-mode docker aio docker-tramp dockerfile-mode which-key use-package font-lock+ dotenv-mode diminish yasnippet-snippets xterm-color ws-butler writeroom-mode winum web-mode web-beautify volatile-highlights vi-tilde-fringe uuidgen unicode-fonts undo-tree typo treemacs-projectile treemacs-persp treemacs-magit treemacs-icons-dired treemacs-evil toml-mode toc-org terminal-here term-cursor tagedit symon symbol-overlay string-inflection string-edit-at-point spaceline-all-the-icons smeargle slime-company slim-mode shfmt shell-pop seeing-is-believing scss-mode sass-mode rvm rust-mode ruby-tools ruby-test-mode ruby-refactor ruby-hash-syntax rubocopfmt rubocop ron-mode robe rjsx-mode restart-emacs rbenv rake rainbow-mode rainbow-identifiers rainbow-delimiters racket-mode quickrun pug-mode prettier-js powershell popwin pdf-view-restore password-generator paradox overseer orgit org-superstar org-rich-yank org-projectile org-present org-pomodoro org-mime org-download org-contrib org-cliplink open-junk-file npm-mode nodejs-repl nameless mvn multi-term multi-line mmm-mode minitest maven-test-mode markdown-toc lsp-ui lsp-origami lsp-latex lsp-java lorem-ipsum livid-mode link-hint ligature json-reformat json-navigator json-mode js2-refactor js-doc inspector insert-shebang info+ indent-guide impatient-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt helpful helm-xref helm-themes helm-swoop helm-rtags helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-lsp helm-ls-git helm-gtags helm-git-grep helm-descbinds helm-ctest helm-css-scss helm-company helm-cider helm-c-yasnippet helm-ag groovy-mode groovy-imports google-translate google-c-style golden-ratio gnuplot gitignore-templates git-timemachine git-modes git-messenger git-link git-gutter-fringe gh-md ggtags gendoxy fuzzy flycheck-ycmd flycheck-rust flycheck-rtags flycheck-pos-tip flycheck-package flycheck-elsa flycheck-clj-kondo flycheck-bashate flx-ido floobits fish-mode fancy-battery eyebrowse extempore-mode expand-region evil-visualstar evil-visual-mark-mode evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-easymotion evil-collection evil-cleverparens evil-args evil-anzu eshell-z eshell-prompt-extras esh-help emr emmet-mode elisp-slime-nav elisp-def editorconfig dumb-jump drag-stuff disaster dired-quick-sort devdocs define-word csv-mode cpp-auto-include company-ycmd company-web company-statistics company-shell company-rtags company-reftex company-quickhelp company-math company-c-headers company-auctex common-lisp-snippets column-enforce-mode color-identifiers-mode cmake-mode clojure-snippets clean-aindent-mode cider-eval-sexp-fu chruby centered-cursor-mode ccls cargo bundler browse-at-remote bmx-mode auto-yasnippet auto-highlight-symbol auto-compile auctex-latexmk ahk-mode aggressive-indent ace-link ace-jump-helm-line ac-ispell hybrid-mode holy-mode evil-evilified-state vim-powerline spacemacs-whitespace-cleanup spacemacs-purpose-popwin space-doc rspec-mode help-fns+ evil-unimpaired evil-tex))
- '(projectile-generic-command
-   "c:\\\\lib\\\\msys64\\\\usr\\\\bin\\\\find.exe . -type f | cut -c3- | tr '\\\\n' '\\\\0'")
+   '(geiser-racket geiser which-key use-package hybrid-mode holy-mode font-lock+ evil-evilified-state dotenv-mode diminish zeal-at-point yasnippet-snippets yapfify xterm-color xkcd ws-butler writeroom-mode winum web-mode web-beautify volatile-highlights vim-powerline vi-tilde-fringe uuidgen unicode-fonts undo-tree typo treemacs-projectile treemacs-persp treemacs-magit treemacs-icons-dired treemacs-evil toml-mode toc-org tide terminal-here term-cursor tagedit systemd symon symbol-overlay string-inflection string-edit-at-point sphinx-doc spacemacs-whitespace-cleanup spacemacs-purpose-popwin spaceline-all-the-icons space-doc smeargle slime-company slim-mode shfmt shell-pop seeing-is-believing scss-mode sass-mode rvm rust-mode ruby-tools ruby-test-mode ruby-refactor ruby-hash-syntax rubocopfmt rubocop rspec-mode ron-mode robe rjsx-mode restart-emacs rbenv ranger rake rainbow-mode rainbow-identifiers rainbow-delimiters quickrun pytest pylookup pyenv-mode pydoc py-isort pug-mode prettier-js popwin poetry pippel pipenv pip-requirements pdf-view-restore password-generator paradox overseer orgit-forge org-superstar org-rich-yank org-projectile org-present org-pomodoro org-mime org-download org-contrib org-cliplink open-junk-file npm-mode nose nodejs-repl nameless mvn multi-vterm multi-term multi-line mmm-mode minitest minibuffer-header maven-test-mode markdown-toc lsp-ui lsp-python-ms lsp-pyright lsp-origami lsp-latex lsp-java lorem-ipsum livid-mode live-py-mode link-hint ligature json-reformat json-navigator json-mode js2-refactor js-doc journalctl-mode inspector insert-shebang info+ indent-guide importmagic impatient-mode ibuffer-projectile hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt helpful help-fns+ helm-xref helm-themes helm-swoop helm-rtags helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-lsp helm-ls-git helm-git-grep helm-descbinds helm-dash helm-css-scss helm-company helm-cider helm-c-yasnippet helm-ag groovy-mode groovy-imports google-translate google-c-style golden-ratio gnuplot gitignore-templates git-timemachine git-modes git-messenger git-link git-gutter-fringe gh-md gendoxy fuzzy flycheck-ycmd flycheck-rust flycheck-rtags flycheck-posframe flycheck-pos-tip flycheck-package flycheck-elsa flycheck-bashate flx-ido fish-mode fancy-battery eyebrowse extempore-mode expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-tex evil-surround evil-org evil-numbers evil-nerd-commenter evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-easymotion evil-collection evil-cleverparens evil-args evil-anzu eshell-z eshell-prompt-extras esh-help emr emmet-mode elisp-slime-nav elisp-def editorconfig dumb-jump dtrt-indent drag-stuff disaster dired-quick-sort devdocs define-word cython-mode csv-mode cpp-auto-include copy-as-format company-ycmd company-web company-statistics company-shell company-rtags company-reftex company-quickhelp company-math company-c-headers company-auctex company-anaconda common-lisp-snippets column-enforce-mode color-identifiers-mode code-cells clojure-snippets clean-aindent-mode cider-eval-sexp-fu chruby centered-cursor-mode ccls cargo bundler browse-at-remote blacken auto-yasnippet auto-highlight-symbol auto-compile aggressive-indent ace-link ace-jump-helm-line ac-ispell))
+ '(pdf-view-display-size 'fit-height)
+ '(pdf-view-midnight-colors '("#b2b2b2" . "#262626"))
+ '(pdf-view-use-scaling t)
+ '(pixel-scroll-precision-interpolate-mice nil)
+ '(pixel-scroll-precision-mode t)
+ '(pixel-scroll-precision-momentum-min-velocity 40.0)
+ '(pixel-scroll-precision-momentum-seconds 0.2)
+ '(pixel-scroll-precision-use-momentum t)
+ '(powerline-default-separator 'curve)
+ '(powerline-gui-use-vcs-glyph t)
+ '(powerline-text-scale-factor 1.075)
+ '(prettify-symbols-unprettify-at-point t)
+ '(projectile-enable-caching t)
  '(projectile-globally-ignored-directories
-   '("^\\.idea$" "^\\.vscode$" "^\\.ensime_cache$" "^\\.eunit$" "^\\.git$" "^\\.hg$" "^\\.fslckout$" "^_FOSSIL_$" "^\\.bzr$" "^_darcs$" "^\\.pijul$" "^\\.tox$" "^\\.svn$" "^\\.stack-work$" "^\\.ccls-cache$" "^\\.cache$" "^\\.clangd$" "^\\.clj-kondo" "^\\.lsp" "^\\.cpcache"))
+   '("^\\.idea$" "^\\.vscode$" "^\\.ensime_cache$" "^\\.eunit$" "^\\.git$" "^\\.hg$" "^\\.fslckout$" "^_FOSSIL_$" "^\\.bzr$" "^_darcs$" "^\\.pijul$" "^\\.tox$" "^\\.svn$" "^\\.stack-work$" "^\\.ccls-cache$" "^\\.cache$" "^\\.clangd$" ".clj-kondo" ".lsp" ".cpcache"))
  '(projectile-globally-ignored-file-suffixes '("~undo-tree~"))
- '(projectile-indexing-method 'hybrid)
- '(warning-minimum-level :error)
+ '(projectile-indexing-method 'alien)
+ '(slime-company-after-completion nil)
+ '(slime-company-transform-arglist 'downcase)
+ '(slime-repl-history-size 1000)
+ '(spaceline-all-the-icons-clock-always-visible nil)
+ '(spaceline-all-the-icons-icon-set-flycheck-slim 'outline)
+ '(spaceline-all-the-icons-icon-set-git-ahead 'commit)
+ '(spaceline-all-the-icons-icon-set-window-numbering 'square)
+ '(spaceline-all-the-icons-separator-type 'cup)
+ '(spaceline-all-the-icons-separators-invert-direction nil)
+ '(spaceline-all-the-icons-slim-render nil)
+ '(spaceline-show-default-input-method t)
+ '(spacemacs-theme-custom-colors
+   '((bg2 . "#353535")
+     (bg1 . "#181818")
+     (comment-bg)
+     (highlight . "#0e587c")
+     (lnum . "#67a08f")))
+ '(tab-bar-mode t)
+ '(tab-bar-new-tab-choice 'helm-recentf)
+ '(tab-bar-new-tab-to 'rightmost)
+ '(tab-bar-select-tab-modifiers '(meta))
+ '(tab-bar-show t)
+ '(tab-bar-tab-hints nil)
+ '(tab-bar-tab-name-function 'tab-bar-tab-name-truncated)
+ '(tab-line-exclude-modes '(completion-list-mode shell pdf-view-mode))
+ '(tab-line-new-tab-choice 'helm-recentf)
+ '(tab-line-tab-name-function 'tab-line-tab-name-truncated-buffer)
+ '(tab-line-tabs-function 'tab-line-tabs-window-buffers)
+ '(tool-bar-mode nil)
+ '(undo-limit 3200000)
+ '(undo-outer-limit 42000000)
+ '(undo-strong-limit 520000)
+ '(undo-tree-auto-save-history t)
+ '(use-system-tooltips nil)
  '(warning-suppress-types '((comp))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(mode-line ((t (:height 1.025 :box (:line-width (1 . 1) :color "#5d4d7a") :foreground "#b2b2b2" :background "#222226")))))
+ '(button ((t (:inherit link :box (:line-width (2 . 2) :color "dark slate gray" :style released-button) :underline nil))))
+ '(centaur-tabs-active-bar-face ((t (:background "#4f97d7" :foreground "light gray" :family "NotoMono Nerd Font"))))
+ '(error ((t (:foreground "#e67f43" :family "Source Code Pro"))))
+ '(font-lock-comment-face ((t (:foreground "#2aa1ae" :slant italic :height 0.8))))
+ '(highlight-parentheses-highlight ((nil (:weight ultra-bold))) t)
+ '(line-number ((t (:foreground "#67a08f" :background "#353535" :inherit JetBrainsMonoNL\ Nerd\ Fonts))))
+ '(minibuffer-header-face ((t (:extend t :background "DarkSeaGreen1" :foreground "gray10"))))
+ '(mode-line ((t (:background "#222226" :foreground "light slate gray" :box (:line-width (1 . 1) :color "#5d4d7a")))))
+ '(powerline-active1 ((t (:background "#5d4d7a" :foreground "gainsboro"))))
+ '(scroll-bar ((t (:background "gray8"))))
+ '(spaceline-evil-insert ((t (:background "chartreuse3" :foreground "systembackground" :inherit 'mode-line))))
+ '(spaceline-evil-normal ((t (:background "DarkGoldenrod2" :foreground "systembackground" :inherit 'mode-line))))
+ '(spaceline-highlight-face ((t (:inherit 'mode-line :foreground "systembackground" :background "DarkGoldenrod2"))))
+ '(spaceline-read-only ((t (:background "plum3" :foreground "systembackground" :inherit 'mode-line))))
+ '(spaceline-unmodified ((t (:background "DarkGoldenrod2" :foreground "systembackground" :inherit 'mode-line))))
+ '(tab-bar ((t (:background "#181818" :foreground "#b9b9b9" :family "JetBrainsMonoNL Nerd Font"))))
+ '(tab-line ((t (:foreground "#b2b2b2" :family "NotoMono Nerd Font"))))
+ '(tool-bar ((t (:background "grey75" :foreground "black" :box (:line-width (1 . 1) :style released-button)))))
+ '(tooltip ((t (:stipple "" :background "#4b4062" :foreground "#b2b2b2" :underline nil :slant normal :weight medium :height 1.05 :family "NotoSans Nerd Font")))))
 )
