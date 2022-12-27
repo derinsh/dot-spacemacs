@@ -32,26 +32,45 @@ This function should only modify configuration layer settings."
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(python
-     ruby
-     csv
-     html
-     rust
-     systemd
+   '(
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
+
+     ;;;; Spacemacs distro
+
+     spacemacs-org
+     spacemacs-purpose
+     spacemacs-project
+     spacemacs-navigation
+     ;; spacemacs-modeline
+     spacemacs-layouts
+     dtrt-indent
+     spacemacs-completion
+     spacemacs-defaults
+     ;; spacemacs-editing
+     ;; spacemacs-editing-visual
+     ;; better-defaults
+
+     (shell :variables
+            shell-default-shell 'vterm
+            ;; shell-default-term-shell "/bin/zsh"
+            shell-default-height 30
+            shell-default-position 'bottom)
+
+     ;;;; Prog tools
+
+     version-control
+     git
+     dap
+
      (auto-completion :variables
                       spacemacs-default-company-backends '(company-files company-capf company-dabbrev-code)
                       auto-completion-enable-sort-by-usage t
                       auto-completion-enable-snippets-in-popup t
                       auto-completion-enable-help-tooltip t)
-     ;; better-defaults
-     emacs-lisp
-     git
-     helm
 
      (lsp :variables
           ;; Formatting and indentation - use Cider instead
@@ -97,65 +116,72 @@ This function should only modify configuration layer settings."
           lsp-use-lsp-ui t
           lsp-headerline-breadcrumb-enable t)
 
-     markdown
-     org
-
-     (shell :variables
-            shell-default-shell 'vterm
-            shell-default-term-shell "/bin/zsh"
-            shell-default-height 30
-            shell-default-position 'bottom)
-
-     ;; spell-checking
-
      (syntax-checking :variables syntax-checking-auto-hide-tooltips 5
                       syntax-checking-enable-tooltips t
                       syntax-checking-enable-by-default t)
 
-     version-control
-     treemacs
-     theming
-     c-c++
-     ;racket
+     ;;;; Lang
+
+     ;; Lisp
+     emacs-lisp
      common-lisp
      clojure
-     ;go
-     ;python
-     pdf
+     (scheme :variables
+             scheme-implementations '(racket))
+     racket
+     extempore
+
+     ;; OO
+     c-c++
+     rust
+     go
+     (java :variables java-backend 'lsp)
+
+     ;; Web
+     html
      javascript
      typescript
-     (java :variables java-backend 'lsp)
-     (unicode-fonts :variables unicode-fonts-enable-ligatures t)
-     dash
-     dap
-     spacemacs-org
-     spacemacs-purpose
-     spacemacs-project
-     spacemacs-navigation
-     ;spacemacs-modeline
-     spacemacs-layouts
-     dtrt-indent
-     spacemacs-completion
-     spacemacs-defaults
-     ;spacemacs-editing
-     ;spacemacs-editing-visual
-     colors
+     web-beautify
      react
      node
-     shell-scripts
      json
+
+     ;; Script
+     python
+     ruby
+
+     ;; Misc
+     markdown
+     shell-scripts
+     systemd
+     csv
+     latex
+
+     ;;;; Emacs
+
+     helm
+     org
      ibuffer
      imenu-list
-     ;tabs
-     typography
-     ;vim-empty-lines
-     xkcd
      ranger
-     web-beautify
-     copy-as-format
+     (treemacs :variables treemacs-use-all-the-icons-theme t
+                          treemacs-use-git-mode 'deferred)
+
+     ;;;; UI
+
+     (unicode-fonts :variables unicode-fonts-enable-ligatures t)
+     typography
+     theming
+     colors
+     ;; tabs
+
+     ;; Doc
+     pdf
+     dash
      helpful
-     latex
-     extempore
+
+     xkcd
+     copy-as-format
      )
 
    ;; List of additional packages that will be installed without being wrapped
@@ -166,7 +192,7 @@ This function should only modify configuration layer settings."
    ;; `dotspacemacs/user-config'. To use a local version of a package, use the
    ;; `:location' property: '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '(flycheck-posframe vterm all-the-icons minibuffer-header company-box popwin geiser geiser-racket) ;'(ein elpy eglot toml-mode w3m use-package company irony company-irony company-box ccls flymake-racket cl-lib popwin geiser geiser-racket shackle exec-path-from-shell solarized-theme bui emms esup flycheck-posframe all-the-icons minibuffer-header vterm)
+   dotspacemacs-additional-packages '(flycheck-posframe all-the-icons minibuffer-header company-box)
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -368,7 +394,7 @@ It should only modify the values of Spacemacs settings."
    ;; a non-negative integer (pixel size), or a floating-point (point size).
    ;; Point size is recommended, because it's device independent. (default 10.0)
    dotspacemacs-default-font '("FiraCode Nerd Font"
-                               :size 12.0
+                               :size 12.5
                                :weight normal
                                :width normal
                                :powerline-scale 1.1)
@@ -661,22 +687,11 @@ configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
 
-  (setq warning-minimum-level :emergency)
 
   (defconst dd/using-native-comp (and (fboundp 'native-comp-available-p)
                                       (native-comp-available-p)))
   (setq native-comp-async-query-on-exit t)
-  (setq native-comp-async-jobs-number 2)
   (setq native-comp-async-report-warnings-errors nil)
-
-  ;; (let ((rip (shell-command-to-string ". ~/.bashrc; echo $RIP")))
-  ;;   (setenv "RIP" rip))
-
-  ;; (setq lsp-haskell-process-path-hie "hie-wrapper")
-  ;; (add-hook 'cc-mode (lambda () (smartparens-mode -1)))
-  ;; (add-hook 'cc-mode (lambda () (electric-pair-mode 1)))
-                                        ;   (spacemacs/toggle-smartparens-globally-off)
-                                        ;   (spacemacs/toggle-smartparens-off)
 
   ;; (defvar slime-repl-font-lock-keywords lisp-el-font-lock-keywords-2)
   ;; (defun slime-repl-font-lock-setup ()
@@ -720,81 +735,17 @@ configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
 
-  (require 'use-package)
+  ;;;; Local packages
 
   (let ((default-directory "~/.emacs.d/usr"))
     (normal-top-level-add-subdirs-to-load-path))
 
-  (add-hook 'geiser-repl-mode-hook
-            (lambda () (local-set-key (kbd "C-j") 'geiser-repl--newline-and-indent)))
-  ;;(add-hook 'geiser-repl-mode-hook
-  ;;          (lambda () (evil-mode -1)))
-  ;; (evil-set-initial-state 'geiser-repl-mode 'emacs)
-
-  ;; (use-package rustic)
-  ;; (spacemacs/toggle-smartparens-globally-off)
-  ;; (electric-pair-mode t)
-  ;; (spacemacs/toggle-smartparens-off)
-  ;; (remove-hook 'prog-mode-hook #'smartparens-mode)
-
-  ;; (setq browse-url-browser-function 'w3m-browse-url)
-
-  (add-hook 'clojure-mode-hook #'lsp-deferred)
-
-  ;; (use-package slime-company
-  ;;   :after (slime company)
-  ;;   :config (setq slime-company-completion 'simple
-  ;;                 slime-company-after-completion 'nil))
-
-  (use-package company
-    :hook (scala-mode . company-mode)
-    :config
-    (setq lsp-completion-provider :capf))
-
-  (add-hook 'prog-mode-hook 'undo-tree-mode)
-
-  (require 'helm-files)
-  (require 'helm-command)
-
-  (remove-hook 'cider-repl-mode-hook 'vim-empty-lines-mode)
-
-  (blink-cursor-mode 1)
-
-  (set-window-scroll-bars (minibuffer-window) 0 'none)
-
-  (defun update-scroll-bars ()
-    (interactive)
-    (mapc (lambda (win)
-            (set-window-scroll-bars win nil))
-          (window-list))
-    (set-window-scroll-bars (selected-window) 10 'right))
-
-  (add-hook 'window-configuration-change-hook #'update-scroll-bars)
-  (add-hook 'buffer-list-update-hook #'update-scroll-bars)
+  (require 'use-package)
 
   (use-package flycheck-posframe
     :ensure t
     :after flycheck
     :config (add-hook 'flycheck-mode-hook #'flycheck-posframe-mode))
-
-  (add-hook 'company-completion-started-hook
-            #'(lambda (&rest _)
-              (setq-local lsp-inhibit-lsp-hooks t)
-              (lsp--capf-clear-cache))
-            nil
-            t)
-
-  ;; No quote pair in minib eval
-
-  ;; (sp-local-pair 'minibuffer-inactive-mode "'" nil :actions nil :unless '(my-in-eval-expression-p))
-  ;; (defun my-in-eval-expression-p (id action context) (equalp last-command 'eval-expression))
-
-  (evil-set-initial-state 'cider-repl-mode 'insert)
-
-  (defun customkeys ()
-    (evil-define-key '(normal insert visual motion emacs) 'global (kbd "<C-left>") #'previous-buffer)
-    (evil-define-key '(normal insert visual motion emacs) 'global (kbd "<C-right>") #'next-buffer)
-    (evil-define-key '(normal insert visual emacs) dired-mode-map [mouse-1] #'dired-find-file))
 
   (require 'nerd-fonts)
 
@@ -818,8 +769,79 @@ before packages are loaded."
     :after spaceline
     :config (spaceline-all-the-icons-theme))
 
-  (spaceline-all-the-icons--setup-anzu)            ;; Enable anzu searching
+  (use-package markdown-xwidget
+    :after markdown-mode
+    :load-path "usr/markdown-xwidget"
+    :bind (:map markdown-mode-command-map
+                ("x" . markdown-xwidget-preview-mode))
+    :custom
+    (markdown-xwidget-command "pandoc")
+    (markdown-xwidget-github-theme "light")
+    (markdown-xwidget-mermaid-theme "default")
+    (markdown-xwidget-code-block-theme "default"))
 
+  ;;;; Preload
+
+  (require 'helm-files)
+  (require 'helm-command)
+
+  ;;;; Prog config
+
+  (use-package company
+    :hook (scala-mode . company-mode)
+    :config
+    (setq lsp-completion-provider :capf))
+
+  (add-hook 'company-completion-started-hook
+            #'(lambda (&rest _)
+                (setq-local lsp-inhibit-lsp-hooks t)
+                (lsp--capf-clear-cache))
+            nil
+            t)
+
+  (add-hook 'geiser-repl-mode-hook
+            ;; Shift-return otherwise
+            (evil-define-key '(normal insert visual emacs) geiser-repl-mode (kbd "C-<enter>") #'geiser-repl--newline-and-indent))
+
+  (add-hook 'clojure-mode-hook #'lsp-deferred)
+
+  ;; (use-package slime-company
+  ;;   :after (slime company)
+  ;;   :config (setq slime-company-completion 'simple
+  ;;                 slime-company-after-completion 'nil))
+
+  (add-hook 'prog-mode-hook 'undo-tree-mode)
+  (remove-hook 'cider-repl-mode-hook 'vim-empty-lines-mode)
+  (evil-set-initial-state 'cider-repl-mode 'insert)
+
+  ;;;; UI
+
+  (blink-cursor-mode 1)
+
+  (set-window-scroll-bars (minibuffer-window) 0 'none)
+
+  (defun update-scroll-bars ()
+    (interactive)
+    (mapc (lambda (win)
+            (set-window-scroll-bars win nil))
+          (window-list))
+    (set-window-scroll-bars (selected-window) 10 'right))
+
+  (add-hook 'window-configuration-change-hook #'update-scroll-bars)
+  (add-hook 'buffer-list-update-hook #'update-scroll-bars)
+
+  ;; No quote pair in minib eval
+  ;; Not working
+  ;; (sp-local-pair 'minibuffer-inactive-mode "'" nil :actions nil :unless '(my-in-eval-expression-p))
+  ;; (defun my-in-eval-expression-p (id action context) (equalp last-command 'eval-expression))
+
+  (defun customkeys ()
+    (evil-define-key '(normal insert visual motion emacs) 'global (kbd "<C-left>") #'previous-buffer)
+    (evil-define-key '(normal insert visual motion emacs) 'global (kbd "<C-right>") #'next-buffer)
+    (evil-define-key '(normal insert visual emacs) dired-mode-map [mouse-1] #'dired-find-file))
+
+
+  (spaceline-all-the-icons--setup-anzu)            ;; Enable anzu searching
   (spaceline-toggle-all-the-icons-eyebrowse-workspace-off)
   (spaceline-toggle-all-the-icons-time-off)
   (spaceline-toggle-all-the-icons-bookmark-on)
@@ -830,16 +852,7 @@ before packages are loaded."
   (setq spaceline-all-the-icons-slim-render nil)
   ;;(spaceline-compile)
 
-  ;; (defvar linit)
-
-  ;; (defun spreload ()
-  ;;   (if (boundp 'linit)
-  ;;       (setq linit nil)
-  ;;       (setq linit 1))
-  ;;   (when linit
-  ;;       (cl-do (dotspacemacs/sync-configuration-layers)
-  ;;           (remove-hook 'server-after-make-frame-hook #'spreload)
-  ;;         )))
+  ;;;; Misc
 
   (add-hook 'Info-selection-hook 'info-colors-fontify-node)
   (setq-default bidi-inhibit-bpa t)
@@ -871,7 +884,7 @@ This function is called at the very end of Spacemacs initialization."
  '(cider-eldoc-display-for-symbol-at-point t)
  '(cider-jack-in-default 'clojure-cli)
  '(cider-repl-display-help-banner t)
- '(cider-repl-pop-to-buffer-on-connect t t)
+ '(cider-repl-pop-to-buffer-on-connect t)
  '(cider-show-error-buffer nil)
  '(column-number-mode t)
  '(comint-input-ignoredups t)
@@ -904,14 +917,15 @@ This function is called at the very end of Spacemacs initialization."
  '(lsp-lens-enable t)
  '(lsp-progress-spinner-type 'horizontal-breathing)
  '(lsp-ui-doc-enable t)
+ '(lsp-ui-sideline-enable nil)
  '(menu-bar-mode t)
- '(mouse-1-click-follows-link 100)
+ '(mouse-1-click-follows-link 50)
  '(mouse-wheel-progressive-speed nil)
  '(org-format-latex-options
    '(:foreground default :background default :scale 1.6 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers
                  ("begin" "$1" "$" "$$" "\\(" "\\[")))
  '(package-selected-packages
-   '(geiser-racket geiser which-key use-package hybrid-mode holy-mode font-lock+ evil-evilified-state dotenv-mode diminish zeal-at-point yasnippet-snippets yapfify xterm-color xkcd ws-butler writeroom-mode winum web-mode web-beautify volatile-highlights vim-powerline vi-tilde-fringe uuidgen unicode-fonts undo-tree typo treemacs-projectile treemacs-persp treemacs-magit treemacs-icons-dired treemacs-evil toml-mode toc-org tide terminal-here term-cursor tagedit systemd symon symbol-overlay string-inflection string-edit-at-point sphinx-doc spacemacs-whitespace-cleanup spacemacs-purpose-popwin spaceline-all-the-icons space-doc smeargle slime-company slim-mode shfmt shell-pop seeing-is-believing scss-mode sass-mode rvm rust-mode ruby-tools ruby-test-mode ruby-refactor ruby-hash-syntax rubocopfmt rubocop rspec-mode ron-mode robe rjsx-mode restart-emacs rbenv ranger rake rainbow-mode rainbow-identifiers rainbow-delimiters quickrun pytest pylookup pyenv-mode pydoc py-isort pug-mode prettier-js popwin poetry pippel pipenv pip-requirements pdf-view-restore password-generator paradox overseer orgit-forge org-superstar org-rich-yank org-projectile org-present org-pomodoro org-mime org-download org-contrib org-cliplink open-junk-file npm-mode nose nodejs-repl nameless mvn multi-vterm multi-term multi-line mmm-mode minitest minibuffer-header maven-test-mode markdown-toc lsp-ui lsp-python-ms lsp-pyright lsp-origami lsp-latex lsp-java lorem-ipsum livid-mode live-py-mode link-hint ligature json-reformat json-navigator json-mode js2-refactor js-doc journalctl-mode inspector insert-shebang info+ indent-guide importmagic impatient-mode ibuffer-projectile hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt helpful help-fns+ helm-xref helm-themes helm-swoop helm-rtags helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-lsp helm-ls-git helm-git-grep helm-descbinds helm-dash helm-css-scss helm-company helm-cider helm-c-yasnippet helm-ag groovy-mode groovy-imports google-translate google-c-style golden-ratio gnuplot gitignore-templates git-timemachine git-modes git-messenger git-link git-gutter-fringe gh-md gendoxy fuzzy flycheck-ycmd flycheck-rust flycheck-rtags flycheck-posframe flycheck-pos-tip flycheck-package flycheck-elsa flycheck-bashate flx-ido fish-mode fancy-battery eyebrowse extempore-mode expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-tex evil-surround evil-org evil-numbers evil-nerd-commenter evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-easymotion evil-collection evil-cleverparens evil-args evil-anzu eshell-z eshell-prompt-extras esh-help emr emmet-mode elisp-slime-nav elisp-def editorconfig dumb-jump dtrt-indent drag-stuff disaster dired-quick-sort devdocs define-word cython-mode csv-mode cpp-auto-include copy-as-format company-ycmd company-web company-statistics company-shell company-rtags company-reftex company-quickhelp company-math company-c-headers company-auctex company-anaconda common-lisp-snippets column-enforce-mode color-identifiers-mode code-cells clojure-snippets clean-aindent-mode cider-eval-sexp-fu chruby centered-cursor-mode ccls cargo bundler browse-at-remote blacken auto-yasnippet auto-highlight-symbol auto-compile aggressive-indent ace-link ace-jump-helm-line ac-ispell))
+   '(mustache company-go counsel-gtags counsel swiper ivy flycheck-golangci-lint ggtags go-eldoc go-fill-struct go-gen-test go-guru go-impl go-rename go-tag go-mode godoctor helm-gtags racket-mode geiser-racket geiser which-key use-package hybrid-mode holy-mode font-lock+ evil-evilified-state dotenv-mode diminish zeal-at-point yasnippet-snippets yapfify xterm-color xkcd ws-butler writeroom-mode winum web-mode web-beautify volatile-highlights vim-powerline vi-tilde-fringe uuidgen unicode-fonts undo-tree typo treemacs-projectile treemacs-persp treemacs-magit treemacs-icons-dired treemacs-evil toml-mode toc-org tide terminal-here term-cursor tagedit systemd symon symbol-overlay string-inflection string-edit-at-point sphinx-doc spacemacs-whitespace-cleanup spacemacs-purpose-popwin spaceline-all-the-icons space-doc smeargle slime-company slim-mode shfmt shell-pop seeing-is-believing scss-mode sass-mode rvm rust-mode ruby-tools ruby-test-mode ruby-refactor ruby-hash-syntax rubocopfmt rubocop rspec-mode ron-mode robe rjsx-mode restart-emacs rbenv ranger rake rainbow-mode rainbow-identifiers rainbow-delimiters quickrun pytest pylookup pyenv-mode pydoc py-isort pug-mode prettier-js popwin poetry pippel pipenv pip-requirements pdf-view-restore password-generator paradox overseer orgit-forge org-superstar org-rich-yank org-projectile org-present org-pomodoro org-mime org-download org-contrib org-cliplink open-junk-file npm-mode nose nodejs-repl nameless mvn multi-vterm multi-term multi-line mmm-mode minitest minibuffer-header maven-test-mode markdown-toc lsp-ui lsp-python-ms lsp-pyright lsp-origami lsp-latex lsp-java lorem-ipsum livid-mode live-py-mode link-hint ligature json-reformat json-navigator json-mode js2-refactor js-doc journalctl-mode inspector insert-shebang info+ indent-guide importmagic impatient-mode ibuffer-projectile hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt helpful help-fns+ helm-xref helm-themes helm-swoop helm-rtags helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-lsp helm-ls-git helm-git-grep helm-descbinds helm-dash helm-css-scss helm-company helm-cider helm-c-yasnippet helm-ag groovy-mode groovy-imports google-translate google-c-style golden-ratio gnuplot gitignore-templates git-timemachine git-modes git-messenger git-link git-gutter-fringe gh-md gendoxy fuzzy flycheck-ycmd flycheck-rust flycheck-rtags flycheck-posframe flycheck-pos-tip flycheck-package flycheck-elsa flycheck-bashate flx-ido fish-mode fancy-battery eyebrowse extempore-mode expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-tex evil-surround evil-org evil-numbers evil-nerd-commenter evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-easymotion evil-collection evil-cleverparens evil-args evil-anzu eshell-z eshell-prompt-extras esh-help emr emmet-mode elisp-slime-nav elisp-def editorconfig dumb-jump dtrt-indent drag-stuff disaster dired-quick-sort devdocs define-word cython-mode csv-mode cpp-auto-include copy-as-format company-ycmd company-web company-statistics company-shell company-rtags company-reftex company-quickhelp company-math company-c-headers company-auctex company-anaconda common-lisp-snippets column-enforce-mode color-identifiers-mode code-cells clojure-snippets clean-aindent-mode cider-eval-sexp-fu chruby centered-cursor-mode ccls cargo bundler browse-at-remote blacken auto-yasnippet auto-highlight-symbol auto-compile aggressive-indent ace-link ace-jump-helm-line ac-ispell))
  '(pdf-view-display-size 'fit-height)
  '(pdf-view-midnight-colors '("#b2b2b2" . "#262626"))
  '(pdf-view-use-scaling t)
@@ -946,6 +960,7 @@ This function is called at the very end of Spacemacs initialization."
      (comment-bg)
      (highlight . "#0e587c")
      (lnum . "#67a08f")))
+ '(tab-bar-auto-width-max '(360 30))
  '(tab-bar-mode t)
  '(tab-bar-new-tab-choice 'helm-recentf)
  '(tab-bar-new-tab-to 'rightmost)
@@ -953,6 +968,7 @@ This function is called at the very end of Spacemacs initialization."
  '(tab-bar-show t)
  '(tab-bar-tab-hints nil)
  '(tab-bar-tab-name-function 'tab-bar-tab-name-truncated)
+ '(tab-bar-tab-name-truncated-max 28)
  '(tab-line-exclude-modes '(completion-list-mode shell pdf-view-mode))
  '(tab-line-new-tab-choice 'helm-recentf)
  '(tab-line-tab-name-function 'tab-line-tab-name-truncated-buffer)
@@ -963,6 +979,7 @@ This function is called at the very end of Spacemacs initialization."
  '(undo-strong-limit 520000)
  '(undo-tree-auto-save-history t)
  '(use-system-tooltips nil)
+ '(warning-minimum-level :emergency)
  '(warning-suppress-types '((comp))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -975,6 +992,7 @@ This function is called at the very end of Spacemacs initialization."
  '(font-lock-comment-face ((t (:foreground "#2aa1ae" :slant italic :height 0.8))))
  '(highlight-parentheses-highlight ((nil (:weight ultra-bold))) t)
  '(line-number ((t (:foreground "#67a08f" :background "#353535" :inherit JetBrainsMonoNL\ Nerd\ Fonts))))
+ '(lsp-ui-sideline-global ((t (:weight semi-bold :height 120 :family "Iosevka"))))
  '(minibuffer-header-face ((t (:extend t :background "DarkSeaGreen1" :foreground "gray10"))))
  '(mode-line ((t (:background "#222226" :foreground "light slate gray" :box (:line-width (1 . 1) :color "#5d4d7a")))))
  '(powerline-active1 ((t (:background "#5d4d7a" :foreground "gainsboro"))))
@@ -984,8 +1002,13 @@ This function is called at the very end of Spacemacs initialization."
  '(spaceline-highlight-face ((t (:inherit 'mode-line :foreground "systembackground" :background "DarkGoldenrod2"))))
  '(spaceline-read-only ((t (:background "plum3" :foreground "systembackground" :inherit 'mode-line))))
  '(spaceline-unmodified ((t (:background "DarkGoldenrod2" :foreground "systembackground" :inherit 'mode-line))))
- '(tab-bar ((t (:background "#181818" :foreground "#b9b9b9" :family "JetBrainsMonoNL Nerd Font"))))
- '(tab-line ((t (:foreground "#b2b2b2" :family "NotoMono Nerd Font"))))
+ '(tab-bar ((t (:background "#181818" :foreground "#b9b9b9" :height 115 :family "Noto Sans Nerd Font"))))
+ '(tab-bar-tab ((t (:background "cornsilk3" :foreground "gray14" :box (:line-width (3 . 3) :color "cornsilk4" :style flat-button) :weight extra-bold :height 111 :width normal))))
+ '(tab-bar-tab-inactive ((t (:background "gray14" :foreground "dark gray" :box (:line-width (3 . 3) :color "gray20" :style released-button) :weight bold :height 110 :width semi-condensed))))
+ '(tab-line ((t (:background "#181818" :foreground "#b2b2b2" :weight bold :family "Noto Sans Nerd Font"))))
+ '(tab-line-highlight ((t (:background "grey85" :foreground "black" :box (:line-width (1 . 1) :style released-button)))))
+ '(tab-line-tab ((t (:inherit tab-line :box (:line-width (2 . 2) :color "gray14" :style released-button) :weight bold))))
+ '(tab-line-tab-inactive ((t (:background "#353535" :foreground "#686868" :weight regular))))
  '(tool-bar ((t (:background "grey75" :foreground "black" :box (:line-width (1 . 1) :style released-button)))))
  '(tooltip ((t (:stipple "" :background "#4b4062" :foreground "#b2b2b2" :underline nil :slant normal :weight medium :height 1.05 :family "NotoSans Nerd Font")))))
 )
