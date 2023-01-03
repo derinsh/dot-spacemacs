@@ -75,29 +75,29 @@ This function should only modify configuration layer settings."
 
      (lsp :variables
           ;; Formatting and indentation - use Cider instead
-          lsp-enable-on-type-formatting nil
+ ;;         lsp-enable-on-type-formatting nil
           ;; Set to nil to use CIDER features instead of LSP UI
-          lsp-enable-indentation nil
+ ;;         lsp-enable-indentation nil
           ;; lsp-enable-snippet nil  ;; to test again
           ;; symbol highlighting - `lsp-toggle-symbol-highlight` toggles highlighting
           ;; subtle highlighting for doom-gruvbox-light theme defined in dotspacemacs/user-config
            ;;lsp-enable-symbol-highlighting t
 
           ;; Show lint error indicator in the mode line
-          lsp-modeline-diagnostics-enable t
+ ;;         lsp-modeline-diagnostics-enable t
           ;; lsp-modeline-diagnostics-scope :workspace
 
           ;; popup documentation boxes
-          lsp-ui-doc-enable t          ;; disable all doc popups
-          lsp-ui-doc-show-with-cursor t   ;; doc popup for cursor
+ ;;         lsp-ui-doc-enable t          ;; disable all doc popups
+ ;;         lsp-ui-doc-show-with-cursor t   ;; doc popup for cursor
           ;; lsp-ui-doc-show-with-mouse t   ;; doc popup for mouse
-          lsp-ui-doc-delay 1             ;; delay in seconds for popup to display
-          lsp-ui-doc-include-signature t    ;; include function signature
-          lsp-ui-doc-position 'at-point  ;; positioning of doc popup: top bottom at-point
-          lsp-ui-doc-alignment 'window      ;; relative location of doc popup: frame window
+ ;;         lsp-ui-doc-delay 1             ;; delay in seconds for popup to display
+ ;;         lsp-ui-doc-include-signature t    ;; include function signature
+ ;;         lsp-ui-doc-position 'at-point  ;; positioning of doc popup: top bottom at-point
+ ;;         lsp-ui-doc-alignment 'window      ;; relative location of doc popup: frame window
 
           ;; code actions and diagnostics text as right-hand side of buffer
-          lsp-ui-sideline-enable t
+ ;;         lsp-ui-sideline-enable t
           ;; lsp-ui-sideline-show-code-actions nil
           ;; lsp-ui-sideline-delay 500
 
@@ -132,7 +132,7 @@ This function should only modify configuration layer settings."
      ;; Lisp
      emacs-lisp
      common-lisp
-     clojure
+     (clojure :variables clojure-enable-linters 'clj-kondo)
      (scheme :variables scheme-implementations '(racket))
      racket
      extempore
@@ -629,7 +629,7 @@ It should only modify the values of Spacemacs settings."
    ;; performance issues, instead of calculating the frame title by
    ;; `spacemacs/title-prepare' all the time.
    ;; (default "%I@%S")
-   dotspacemacs-frame-title-format "%b @ Emacs";nil ;"%I@%S"
+   dotspacemacs-frame-title-format "%b @ Emacs"
 
    ;; Format specification for setting the icon title format
    ;; (default nil - same as frame-title-format)
@@ -896,7 +896,7 @@ This function is called at the very end of Spacemacs initialization."
  '(cider-eldoc-display-for-symbol-at-point t)
  '(cider-jack-in-default 'clojure-cli)
  '(cider-repl-display-help-banner t)
- '(cider-repl-pop-to-buffer-on-connect t t)
+ '(cider-repl-pop-to-buffer-on-connect t)
  '(cider-show-error-buffer nil)
  '(column-number-mode t)
  '(comint-input-ignoredups t)
@@ -918,18 +918,18 @@ This function is called at the very end of Spacemacs initialization."
  '(image-use-external-converter t)
  '(initial-buffer-choice '(closure (t) nil (get-buffer-create "*spacemacs*")))
  '(ls-lisp-use-insert-directory-program t)
- '(lsp-completion-provider :capf t)
+ '(lsp-completion-provider :capf)
  '(lsp-eldoc-render-all t)
  '(lsp-enable-folding nil)
- '(lsp-enable-indentation nil t)
- '(lsp-enable-on-type-formatting nil t)
+ '(lsp-enable-imenu nil)
+ '(lsp-enable-indentation nil)
+ '(lsp-enable-on-type-formatting nil)
  '(lsp-enable-symbol-highlighting nil)
  '(lsp-headerline-breadcrumb-enable-diagnostics nil)
  '(lsp-java-workspace-dir "/home/psi/code/inlmning")
  '(lsp-lens-enable t)
  '(lsp-progress-spinner-type 'horizontal-breathing)
- '(lsp-ui-doc-enable t t)
- '(lsp-ui-sideline-enable nil t)
+ '(lsp-ui-sideline-enable nil)
  '(menu-bar-mode t)
  '(mouse-1-click-follows-link 50)
  '(mouse-wheel-progressive-speed nil)
@@ -937,11 +937,12 @@ This function is called at the very end of Spacemacs initialization."
    '(:foreground default :background default :scale 1.6 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers
                  ("begin" "$1" "$" "$$" "\\(" "\\[")))
  '(package-selected-packages
-   '(alchemist elixir-mode flycheck-credo ob-elixir attrap cmm-mode company-cabal dante lcr erlang flycheck-haskell haskell-mode haskell-snippets helm-hoogle hindent hlint-refactor lsp-haskell tree-sitter-langs tree-sitter tsc mustache company-go counsel-gtags counsel swiper ivy flycheck-golangci-lint ggtags go-eldoc go-fill-struct go-gen-test go-guru go-impl go-rename go-tag go-mode godoctor helm-gtags racket-mode geiser-racket geiser which-key use-package hybrid-mode holy-mode font-lock+ evil-evilified-state dotenv-mode diminish zeal-at-point yasnippet-snippets yapfify xterm-color xkcd ws-butler writeroom-mode winum web-mode web-beautify volatile-highlights vim-powerline vi-tilde-fringe uuidgen unicode-fonts undo-tree typo treemacs-projectile treemacs-persp treemacs-magit treemacs-icons-dired treemacs-evil toml-mode toc-org tide terminal-here term-cursor tagedit systemd symon symbol-overlay string-inflection string-edit-at-point sphinx-doc spacemacs-whitespace-cleanup spacemacs-purpose-popwin spaceline-all-the-icons space-doc smeargle slime-company slim-mode shfmt shell-pop seeing-is-believing scss-mode sass-mode rvm rust-mode ruby-tools ruby-test-mode ruby-refactor ruby-hash-syntax rubocopfmt rubocop rspec-mode ron-mode robe rjsx-mode restart-emacs rbenv ranger rake rainbow-mode rainbow-identifiers rainbow-delimiters quickrun pytest pylookup pyenv-mode pydoc py-isort pug-mode prettier-js popwin poetry pippel pipenv pip-requirements pdf-view-restore password-generator paradox overseer orgit-forge org-superstar org-rich-yank org-projectile org-present org-pomodoro org-mime org-download org-contrib org-cliplink open-junk-file npm-mode nose nodejs-repl nameless mvn multi-vterm multi-term multi-line mmm-mode minitest minibuffer-header maven-test-mode markdown-toc lsp-ui lsp-python-ms lsp-pyright lsp-origami lsp-latex lsp-java lorem-ipsum livid-mode live-py-mode link-hint ligature json-reformat json-navigator json-mode js2-refactor js-doc journalctl-mode inspector insert-shebang info+ indent-guide importmagic impatient-mode ibuffer-projectile hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt helpful help-fns+ helm-xref helm-themes helm-swoop helm-rtags helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-lsp helm-ls-git helm-git-grep helm-descbinds helm-dash helm-css-scss helm-company helm-cider helm-c-yasnippet helm-ag groovy-mode groovy-imports google-translate google-c-style golden-ratio gnuplot gitignore-templates git-timemachine git-modes git-messenger git-link git-gutter-fringe gh-md gendoxy fuzzy flycheck-ycmd flycheck-rust flycheck-rtags flycheck-posframe flycheck-pos-tip flycheck-package flycheck-elsa flycheck-bashate flx-ido fish-mode fancy-battery eyebrowse extempore-mode expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-tex evil-surround evil-org evil-numbers evil-nerd-commenter evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-easymotion evil-collection evil-cleverparens evil-args evil-anzu eshell-z eshell-prompt-extras esh-help emr emmet-mode elisp-slime-nav elisp-def editorconfig dumb-jump dtrt-indent drag-stuff disaster dired-quick-sort devdocs define-word cython-mode csv-mode cpp-auto-include copy-as-format company-ycmd company-web company-statistics company-shell company-rtags company-reftex company-quickhelp company-math company-c-headers company-auctex company-anaconda common-lisp-snippets column-enforce-mode color-identifiers-mode code-cells clojure-snippets clean-aindent-mode cider-eval-sexp-fu chruby centered-cursor-mode ccls cargo bundler browse-at-remote blacken auto-yasnippet auto-highlight-symbol auto-compile aggressive-indent ace-link ace-jump-helm-line ac-ispell))
+   '(flycheck-clj-kondo kaolin-themes alchemist elixir-mode flycheck-credo ob-elixir attrap cmm-mode company-cabal dante lcr erlang flycheck-haskell haskell-mode haskell-snippets helm-hoogle hindent hlint-refactor lsp-haskell tree-sitter-langs tree-sitter tsc mustache company-go counsel-gtags counsel swiper ivy flycheck-golangci-lint ggtags go-eldoc go-fill-struct go-gen-test go-guru go-impl go-rename go-tag go-mode godoctor helm-gtags racket-mode geiser-racket geiser which-key use-package hybrid-mode holy-mode font-lock+ evil-evilified-state dotenv-mode diminish zeal-at-point yasnippet-snippets yapfify xterm-color xkcd ws-butler writeroom-mode winum web-mode web-beautify volatile-highlights vim-powerline vi-tilde-fringe uuidgen unicode-fonts undo-tree typo treemacs-projectile treemacs-persp treemacs-magit treemacs-icons-dired treemacs-evil toml-mode toc-org tide terminal-here term-cursor tagedit systemd symon symbol-overlay string-inflection string-edit-at-point sphinx-doc spacemacs-whitespace-cleanup spacemacs-purpose-popwin spaceline-all-the-icons space-doc smeargle slime-company slim-mode shfmt shell-pop seeing-is-believing scss-mode sass-mode rvm rust-mode ruby-tools ruby-test-mode ruby-refactor ruby-hash-syntax rubocopfmt rubocop rspec-mode ron-mode robe rjsx-mode restart-emacs rbenv ranger rake rainbow-mode rainbow-identifiers rainbow-delimiters quickrun pytest pylookup pyenv-mode pydoc py-isort pug-mode prettier-js popwin poetry pippel pipenv pip-requirements pdf-view-restore password-generator paradox overseer orgit-forge org-superstar org-rich-yank org-projectile org-present org-pomodoro org-mime org-download org-contrib org-cliplink open-junk-file npm-mode nose nodejs-repl nameless mvn multi-vterm multi-term multi-line mmm-mode minitest minibuffer-header maven-test-mode markdown-toc lsp-ui lsp-python-ms lsp-pyright lsp-origami lsp-latex lsp-java lorem-ipsum livid-mode live-py-mode link-hint ligature json-reformat json-navigator json-mode js2-refactor js-doc journalctl-mode inspector insert-shebang info+ indent-guide importmagic impatient-mode ibuffer-projectile hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt helpful help-fns+ helm-xref helm-themes helm-swoop helm-rtags helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-lsp helm-ls-git helm-git-grep helm-descbinds helm-dash helm-css-scss helm-company helm-cider helm-c-yasnippet helm-ag groovy-mode groovy-imports google-translate google-c-style golden-ratio gnuplot gitignore-templates git-timemachine git-modes git-messenger git-link git-gutter-fringe gh-md gendoxy fuzzy flycheck-ycmd flycheck-rust flycheck-rtags flycheck-posframe flycheck-pos-tip flycheck-package flycheck-elsa flycheck-bashate flx-ido fish-mode fancy-battery eyebrowse extempore-mode expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-tex evil-surround evil-org evil-numbers evil-nerd-commenter evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-easymotion evil-collection evil-cleverparens evil-args evil-anzu eshell-z eshell-prompt-extras esh-help emr emmet-mode elisp-slime-nav elisp-def editorconfig dumb-jump dtrt-indent drag-stuff disaster dired-quick-sort devdocs define-word cython-mode csv-mode cpp-auto-include copy-as-format company-ycmd company-web company-statistics company-shell company-rtags company-reftex company-quickhelp company-math company-c-headers company-auctex company-anaconda common-lisp-snippets column-enforce-mode color-identifiers-mode code-cells clojure-snippets clean-aindent-mode cider-eval-sexp-fu chruby centered-cursor-mode ccls cargo bundler browse-at-remote blacken auto-yasnippet auto-highlight-symbol auto-compile aggressive-indent ace-link ace-jump-helm-line ac-ispell))
  '(pdf-view-display-size 'fit-height)
  '(pdf-view-midnight-colors '("#b2b2b2" . "#262626"))
  '(pdf-view-use-scaling t)
  '(pixel-scroll-precision-interpolate-mice nil)
+ '(pixel-scroll-precision-interpolation-factor 1.0)
  '(pixel-scroll-precision-mode t)
  '(pixel-scroll-precision-momentum-min-velocity 40.0)
  '(pixel-scroll-precision-momentum-seconds 0.2)
