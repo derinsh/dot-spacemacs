@@ -362,9 +362,9 @@ It should only modify the values of Spacemacs settings."
    ;; Default font or prioritized list of fonts. The `:size' can be specified as
    ;; a non-negative integer (pixel size), or a floating-point (point size).
    ;; Point size is recommended, because it's device independent. (default 10.0)
-   dotspacemacs-default-font '("FiraCode Nerd Font"
+   dotspacemacs-default-font '("FiraCode NF"
                                :size 10.0
-                               :weight normal
+                               :weight regular
                                :width normal
                                :powerline-scale 1.2)
 
@@ -863,7 +863,9 @@ This function is called at the very end of Spacemacs initialization."
      (bg1 . "#181818")
      (highlight . "#0e587c")
      (lnum . "#67a08f")))
+ '(tab-bar-auto-width-max '(350 20))
  '(tab-bar-mode t)
+ '(tab-bar-tab-name-truncated-max 30)
  '(treemacs-width 30)
  '(treemacs-window-background-color '("#1f1720" . "#45395b"))
  '(use-package-always-demand nil)
@@ -881,7 +883,7 @@ This function is called at the very end of Spacemacs initialization."
  '(error ((t (:foreground "#e67f43" :family "Source Code Pro"))))
  '(font-lock-comment-face ((t (:foreground "#2aa1ae" :slant italic :height 0.8))))
  '(highlight-parentheses-highlight ((nil (:weight ultra-bold))) t)
- '(line-number ((t (:foreground "#67a08f" :background "#353535" :inherit JetBrainsMonoNL\ Nerd\ Fonts))))
+ '(line-number ((t (:background "#353535" :foreground "#67a08f" :family "JetBrainsMonoNL Nerd Font"))))
  '(minibuffer-header-face ((t (:extend t :background "DarkSeaGreen1" :foreground "gray10"))))
  '(mode-line ((t (:height 1.025 :box (:line-width (1 . 1) :color "#5d4d7a") :foreground "#b2b2b2" :background "#222226"))))
  '(powerline-active1 ((t (:background "#5d4d7a" :foreground "SystemScrollbar"))))
@@ -890,12 +892,14 @@ This function is called at the very end of Spacemacs initialization."
  '(spaceline-highlight-face ((t (:inherit 'mode-line :foreground "systembackground" :background "DarkGoldenrod2"))))
  '(spaceline-read-only ((t (:background "plum3" :foreground "systembackground" :inherit 'mode-line))))
  '(spaceline-unmodified ((t (:background "DarkGoldenrod2" :foreground "systembackground" :inherit 'mode-line))))
- '(tab-bar ((t (:background "#181818" :foreground "#b9b9b9" :height 110 :family "Noto Sans Nerd Font"))))
+ '(tab-bar ((t (:background "#181818" :foreground "#b9b9b9" :weight regular :height 110 :family "NotoSans NF"))))
  '(tab-bar-tab ((t (:background "cornsilk3" :foreground "gray14" :box (:line-width (3 . 3) :color "cornsilk4" :style flat-button) :weight bold :height 100 :width normal))))
  '(tab-bar-tab-inactive ((t (:background "gray14" :foreground "dark gray" :box (:line-width (3 . 3) :color "gray20" :style released-button) :weight semi-bold :height 100 :width normal))))
- '(tab-line ((t (:background "#181818" :foreground "#b2b2b2" :weight bold :family "Noto Sans Nerd Font"))))
- '(tab-line-highlight ((t (:background "grey85" :foreground "black" :box (:line-width (1 . 1) :style released-button)))))
+ '(tab-line ((t (:background "#181818" :foreground "#b2b2b2" :weight regular :height 100 :family "NotoSans NF"))))
+ '(tab-line-highlight ((t (:inherit tab-line :background "grey85" :foreground "black" :box (:line-width (2 . 2) :style released-button) :weight bold))))
  '(tab-line-tab ((t (:inherit tab-line :box (:line-width (2 . 2) :color "gray14" :style released-button) :weight bold))))
- '(tab-line-tab-inactive ((t (:background "#353535" :foreground "#686868" :weight regular))))
+ '(tab-line-tab-current ((t (:inherit tab-line-tab))))
+ '(tab-line-tab-inactive ((t (:inherit tab-line :background "#353535" :foreground "#686868" :box (:line-width (2 . 2) :color "gray14" :style flat-button) :weight semi-bold))))
+ '(tab-line-tab-special ((t (:background "#353535" :box (:line-width (2 . 2) :color "gray14" :style flat-button) :weight bold))))
  '(tooltip ((t (:background "#4b4062" :foreground "#b2b2b2" :underline nil :slant normal :weight normal)))))
 )
