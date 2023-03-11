@@ -59,7 +59,22 @@ This function should only modify configuration layer settings."
 
      ;;;; Prog tools
 
-     lsp
+     (lsp :variables
+          treemacs-space-between-root-nodes nil
+
+          ;; UI
+          lsp-use-lsp-ui t
+          lsp-headerline-breadcrumb-enable t
+          lsp-lens-enable t
+
+          ;; Optimization for large files
+          lsp-file-watch-threshold 10000
+          lsp-log-io nil
+
+          ;; Rust
+          cargo-process-reload-on-modify t)
+
+     ;; lsp
      version-control
      git
      dap
@@ -164,7 +179,7 @@ This function should only modify configuration layer settings."
    dotspacemacs-additional-packages '(flycheck-posframe company-box rustic)
 
    ;; A list of packages that cannot be updated.
-   dotspacemacs-frozen-packages '()
+   dotspacemacs-frozen-packages '(all-the-icons)
 
    ;; A list of packages that will not be installed and loaded.
 
@@ -669,6 +684,29 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
     (normal-top-level-add-subdirs-to-load-path))
 
   (require 'use-package)
+
+  (require 'nerd-fonts)
+
+  (use-package all-the-icons
+    :config
+    ;; Make sure the icon fonts are good to go
+    (set-fontset-font t 'unicode (font-spec :family "all-the-icons") nil 'append)
+    (set-fontset-font t 'unicode (font-spec :family "file-icons") nil 'append)
+    (set-fontset-font t 'unicode (font-spec :family "Material Icons") nil 'append)
+    (set-fontset-font t 'unicode (font-spec :family "github-octicons") nil 'append)
+    (set-fontset-font t 'unicode (font-spec :family "FontAwesome") nil 'append)
+    (set-fontset-font t 'unicode (font-spec :family "Weather Icons") nil 'append))
+
+  (use-package all-the-icons-nerd-fonts
+    :load-path "usr/all-the-icons-nerd-fonts"
+    :after all-the-icons
+    :demand t
+    :config) ;(all-the-icons-nerd-fonts-prefer))
+
+  (use-package spaceline-all-the-icons
+    :after spaceline
+    :config (spaceline-all-the-icons-theme))
+
   )
 
 
@@ -695,31 +733,9 @@ before packages are loaded."
     :after flycheck
     :config (add-hook 'flycheck-mode-hook #'flycheck-posframe-mode))
 
-  (require 'nerd-fonts)
-
-  (use-package all-the-icons
-    :config
-    ;; Make sure the icon fonts are good to go
-    (set-fontset-font t 'unicode (font-spec :family "all-the-icons") nil 'append)
-    (set-fontset-font t 'unicode (font-spec :family "file-icons") nil 'append)
-    (set-fontset-font t 'unicode (font-spec :family "Material Icons") nil 'append)
-    (set-fontset-font t 'unicode (font-spec :family "github-octicons") nil 'append)
-    (set-fontset-font t 'unicode (font-spec :family "FontAwesome") nil 'append)
-    (set-fontset-font t 'unicode (font-spec :family "Weather Icons") nil 'append))
-
-  (use-package all-the-icons-nerd-fonts
-    :load-path "usr/all-the-icons-nerd-fonts"
-    :after all-the-icons
-    :demand t
-    :config) ;(all-the-icons-nerd-fonts-prefer))
-
-  (use-package spaceline-all-the-icons
-    :after spaceline
-    :config (spaceline-all-the-icons-theme))
-
   ;; Native tree-sitter, but not working...
-  ;(require 'treesit)
-  ;(setq-default treesit-extra-load-path "usr/tree-sitter-module/dist")
+  (require 'treesit)
+  (setq-default treesit-extra-load-path "usr/tree-sitter-module/dist")
 
   (use-package company
    :config
@@ -770,7 +786,8 @@ before packages are loaded."
   (defun customkeys ()
     (evil-define-key '(normal insert visual motion emacs) 'global [mouse-4] #'previous-buffer)
     (evil-define-key '(normal insert visual motion emacs) 'global [mouse-5] #'next-buffer)
-    (evil-define-key '(normal insert visual emacs) dired-mode-map [mouse-1] #'dired-find-file))
+    (evil-define-key '(normal insert visual emacs) dired-mode-map [mouse-1] #'dired-find-file)
+    (evil-define-key '(normal insert visual motion emacs) 'global (kbd "M-<f1>") #'tab-line-mode))
 
   (spaceline-toggle-all-the-icons-eyebrowse-workspace-off)
   (spaceline-toggle-all-the-icons-time-off)
@@ -820,21 +837,6 @@ This function is called at the very end of Spacemacs initialization."
  '(global-prettify-symbols-mode t)
  '(image-use-external-converter t)
  '(ls-lisp-use-insert-directory-program t)
- '(lsp-configure-hook
-   '(lsp-lens--enable lsp-modeline-workspace-status-mode lsp-modeline-diagnostics-mode lsp-modeline-code-actions-mode lsp-headerline-breadcrumb-mode
-                      (closure
-                          (t)
-                          nil
-                        (if lsp-auto-configure
-                            (progn
-                              (lsp-diagnostics--enable))))
-                      (closure
-                          (t)
-                          nil
-                        (if
-                            (and lsp-auto-configure lsp-completion-enable)
-                            (progn
-                              (lsp-completion--enable))))))
  '(lsp-eldoc-render-all t)
  '(lsp-enable-indentation nil)
  '(lsp-file-watch-threshold 10000)
@@ -857,6 +859,8 @@ This function is called at the very end of Spacemacs initialization."
    '("^\\.idea$" "^\\.vscode$" "^\\.ensime_cache$" "^\\.eunit$" "^\\.git$" "^\\.hg$" "^\\.fslckout$" "^_FOSSIL_$" "^\\.bzr$" "^_darcs$" "^\\.pijul$" "^\\.tox$" "^\\.svn$" "^\\.stack-work$" "^\\.ccls-cache$" "^\\.cache$" "^\\.clangd$" "^\\.clj-kondo" "^\\.lsp" "^\\.cpcache"))
  '(projectile-globally-ignored-file-suffixes '("~undo-tree~"))
  '(projectile-indexing-method 'alien)
+ '(spaceline-all-the-icons-file-name-highlight "lightcyan2")
+ '(spaceline-all-the-icons-highlight-file-name t)
  '(spacemacs-theme-comment-bg nil)
  '(spacemacs-theme-custom-colors
    '((bg2 . "#353535")
@@ -866,6 +870,9 @@ This function is called at the very end of Spacemacs initialization."
  '(tab-bar-auto-width-max '(350 20))
  '(tab-bar-mode t)
  '(tab-bar-tab-name-truncated-max 30)
+ '(tooltip-delay 0.5)
+ '(tooltip-reuse-hidden-frame nil)
+ '(treemacs-python-executable "c:/lib/Pyton/Python39/python.exe")
  '(treemacs-width 30)
  '(treemacs-window-background-color '("#1f1720" . "#45395b"))
  '(use-package-always-demand nil)
@@ -885,7 +892,9 @@ This function is called at the very end of Spacemacs initialization."
  '(highlight-parentheses-highlight ((nil (:weight ultra-bold))) t)
  '(line-number ((t (:background "#353535" :foreground "#67a08f" :family "JetBrainsMonoNL Nerd Font"))))
  '(minibuffer-header-face ((t (:extend t :background "DarkSeaGreen1" :foreground "gray10"))))
- '(mode-line ((t (:height 1.025 :box (:line-width (1 . 1) :color "#5d4d7a") :foreground "#b2b2b2" :background "#222226"))))
+ '(mode-line ((t (:background "#222226" :foreground "#b2b2b2" :box (:line-width (1 . 1) :color "#5d4d7a") :height 105))))
+ '(mode-line-active ((t (:inherit mode-line))))
+ '(mode-line-highlight ((t (:box (:line-width (2 . 2) :color "grey40" :style released-button)))))
  '(powerline-active1 ((t (:background "#5d4d7a" :foreground "SystemScrollbar"))))
  '(spaceline-evil-insert ((t (:background "chartreuse3" :foreground "systembackground" :inherit 'mode-line))))
  '(spaceline-evil-normal ((t (:background "DarkGoldenrod2" :foreground "systembackground" :inherit 'mode-line))))
@@ -901,5 +910,5 @@ This function is called at the very end of Spacemacs initialization."
  '(tab-line-tab-current ((t (:inherit tab-line-tab))))
  '(tab-line-tab-inactive ((t (:inherit tab-line :background "#353535" :foreground "#686868" :box (:line-width (2 . 2) :color "gray14" :style flat-button) :weight semi-bold))))
  '(tab-line-tab-special ((t (:background "#353535" :box (:line-width (2 . 2) :color "gray14" :style flat-button) :weight bold))))
- '(tooltip ((t (:background "#4b4062" :foreground "#b2b2b2" :underline nil :slant normal :weight normal)))))
+ '(tooltip ((t (:background "#4b4062" :foreground "#b2b2b2" :underline nil :slant normal :weight normal :height 1.0)))))
 )
